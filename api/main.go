@@ -1,7 +1,8 @@
 package main
 
-import "fmt"
+import log "github.com/sirupsen/logrus"
 
 func main() {
-	fmt.Println("Nirikshan Backend")
+	log.Info("Nirikshan is booting")
+	log.Info("Nirikshan quit successfully")
 }
