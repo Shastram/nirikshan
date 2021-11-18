@@ -20,6 +20,9 @@ var (
 	UsernameField         = "username"
 	SiteConfigCollection  = "site_configs"
 	UserRecordsCollection = "user_dump_records"
+	TelegramBotToken      = os.Getenv("TELEGRAM_BOT_TOKEN")
+	TelegramUser          = getEnvAsInt("TELEGRAM_USER", 0)
+	NirikshanBackendGithub = "https://github.com/Shastram/nirikshan-backend"
 	RedisPassword         = ""
 	RedisAddr             = "localhost:6379"
 	DdosCountLimit        = 4

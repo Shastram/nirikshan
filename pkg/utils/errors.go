@@ -18,6 +18,7 @@ var (
 	ErrWrongPassword                 AppError = errors.New("password doesn't match")
 	ErrInvalidToken                  AppError = errors.New("invalid_credential")
 	ErrInvalidSite                   AppError = errors.New("site_not_configured")
+	ErrDos                           AppError = errors.New("DDOS BAN")
 )
 
 // ErrorStatusCodes holds the http status codes for every AppError

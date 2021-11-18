@@ -51,8 +51,9 @@ func main() {
 	userRecordRepo := records.NewRepo(userRecordCollection)
 
 	rdb := utils.RedisDatabaseConnection()
+	teleBot := utils.InitialiseTelegramBot()
 	applicationService := services.NewService(userRepo, siteRepo,
-		userRecordRepo, db, rdb)
+		userRecordRepo, db, rdb, teleBot)
 
 	runRestServer(applicationService)
 }

@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"errors"
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis/v8"
 	ua "github.com/mileusna/useragent"
@@ -70,6 +69,15 @@ func Proxy(service services.ApplicationService) gin.HandlerFunc {
 		}
 		err = ddosCounter(service, cip)
 		if err != nil {
+			if err == utils.ErrDos {
+				err := service.SendMessage("Hey user, " +
+					"you are currently being DDoSed, " +
+					"please check your nirikshan logs ASAP!")
+				if err != nil {
+					log.Error(err)
+					return
+				}
+			}
 			dump.IsBlackListed = true
 			err = service.CreateDump(&dump)
 			c.JSON(utils.ErrorStatusCodes[utils.ErrNotAllowed],
@@ -112,7 +120,7 @@ func ddosCounter(service services.ApplicationService, ip string) error {
 		return err
 	}
 	if count > utils.DdosCountLimit {
-		return errors.New("DDoS BAN")
+		return utils.ErrDos
 	}
 	err = service.PutData(ip, strconv.Itoa(count+1))
 	if err != nil {
