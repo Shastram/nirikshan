@@ -19,6 +19,8 @@ var (
 	ErrInvalidToken                  AppError = errors.New("invalid_credential")
 	ErrInvalidSite                   AppError = errors.New("site_not_configured")
 	ErrDos                           AppError = errors.New("DDOS BAN")
+	ErrNoticeBan                     AppError = errors.New(
+		"DDOS BAN notification")
 )
 
 // ErrorStatusCodes holds the http status codes for every AppError

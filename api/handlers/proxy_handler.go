@@ -63,6 +63,7 @@ func Proxy(service services.ApplicationService) gin.HandlerFunc {
 			BlockedOSVersion || userInfo.Name == configs.BlockedBrowser {
 			dump.IsBlackListed = true
 			err = service.CreateDump(&dump)
+			log.Warn("blacklisted entry")
 			c.JSON(utils.ErrorStatusCodes[utils.ErrNotAllowed],
 				presenter.CreateErrorResponse(utils.ErrNotAllowed))
 			return
@@ -70,10 +71,9 @@ func Proxy(service services.ApplicationService) gin.HandlerFunc {
 		err = ddosCounter(service, cip)
 		if err != nil {
 			log.Error(err)
-			if err == utils.ErrDos {
-				err := service.SendMessage("Hey user, " +
-					"you are currently being DDoSed, " +
-					"please check your nirikshan logs ASAP!")
+			if err == utils.ErrNoticeBan {
+				err := service.SendMessage(utils.DDoSTemplate(cip,
+					userInfo.Name, userInfo.OS))
 				if err != nil {
 					log.Error(err)
 					return
@@ -127,6 +127,9 @@ func ddosCounter(service services.ApplicationService, ip string) error {
 	err = service.PutData(ip, strconv.Itoa(count+1))
 	if err != nil {
 		return err
+	}
+	if count == utils.DdosCountLimit {
+		return utils.ErrNoticeBan
 	}
 	return nil
 }

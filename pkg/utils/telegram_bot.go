@@ -46,7 +46,7 @@ func InitialiseTelegramBot() *tgbotapi.BotAPI {
 }
 
 func startTemplate(username string) string {
-	var startTemplate = fmt.Sprintf(
+	return fmt.Sprintf(
 		"Hello %s ! Welcome to Nirakshan !\n\n"+
 			"Steps to use Nirakshan: \n"+
 			"1. use /getid to generate your unique id \n\n"+
@@ -55,5 +55,16 @@ func startTemplate(username string) string {
 			" \n\n"+
 			"4. That's it, you will be notified of any DDOS attacks , "+
 			"enjoy :D \n\n\n", username, NirikshanBackendGithub)
-	return startTemplate
+}
+
+func DDoSTemplate(ip string, browser string, os string) string {
+	return fmt.Sprintf(
+		"Hey User, this is a high priority noticiation from Nirikshan\n"+
+			"You are curently being DDoSed by someone! \n"+
+			"The following contains data of the last request \n\n"+
+			"IP Address: %s \n"+
+			"Device Browser: %s \n"+
+			"OS: %s \n\n"+
+			"Please open Nirikshan Audit to verify asap", ip, browser, os,
+	)
 }
