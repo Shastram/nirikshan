@@ -3,6 +3,7 @@ package utils
 import (
 	"os"
 	"strconv"
+	"time"
 
 	"golang.org/x/crypto/bcrypt"
 )
@@ -19,6 +20,10 @@ var (
 	UsernameField         = "username"
 	SiteConfigCollection  = "site_configs"
 	UserRecordsCollection = "user_dump_records"
+	RedisPassword         = ""
+	RedisAddr             = "localhost:6379"
+	DdosCountLimit        = 4
+	DdosExpirationTime    = time.Hour * 1
 
 	PasswordEncryptionCost = bcrypt.DefaultCost
 )

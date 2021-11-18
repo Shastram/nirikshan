@@ -49,7 +49,10 @@ func main() {
 
 	userRecordCollection := db.Collection(utils.UserRecordsCollection)
 	userRecordRepo := records.NewRepo(userRecordCollection)
-	applicationService := services.NewService(userRepo, siteRepo, userRecordRepo, db)
+
+	rdb := utils.RedisDatabaseConnection()
+	applicationService := services.NewService(userRepo, siteRepo,
+		userRecordRepo, db, rdb)
 
 	runRestServer(applicationService)
 }

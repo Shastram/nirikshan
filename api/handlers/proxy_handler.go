@@ -1,7 +1,9 @@
 package handlers
 
 import (
+	"errors"
 	"github.com/gin-gonic/gin"
+	"github.com/go-redis/redis/v8"
 	ua "github.com/mileusna/useragent"
 	log "github.com/sirupsen/logrus"
 	"net/http"
@@ -11,6 +13,7 @@ import (
 	"nirikshan-backend/pkg/entities"
 	"nirikshan-backend/pkg/services"
 	"nirikshan-backend/pkg/utils"
+	"strconv"
 	"time"
 )
 
@@ -65,6 +68,14 @@ func Proxy(service services.ApplicationService) gin.HandlerFunc {
 				presenter.CreateErrorResponse(utils.ErrNotAllowed))
 			return
 		}
+		err = ddosCounter(service, cip)
+		if err != nil {
+			dump.IsBlackListed = true
+			err = service.CreateDump(&dump)
+			c.JSON(utils.ErrorStatusCodes[utils.ErrNotAllowed],
+				presenter.CreateErrorResponse(utils.ErrNotAllowed))
+			return
+		}
 		err = service.CreateDump(&dump)
 		remote, err := url.Parse(configs.ForwardingURL)
 		if err != nil {
@@ -83,4 +94,29 @@ func Proxy(service services.ApplicationService) gin.HandlerFunc {
 		}
 		proxy.ServeHTTP(c.Writer, c.Request)
 	}
+}
+
+func ddosCounter(service services.ApplicationService, ip string) error {
+	getIpCount, err := service.GetKey(ip)
+	if err == redis.Nil || getIpCount == "" {
+		err = service.PutData(ip, strconv.Itoa(0))
+		if err != nil {
+			return err
+		}
+	} else if err != nil {
+		return err
+	}
+
+	count, err := strconv.Atoi(getIpCount)
+	if err != nil {
+		return err
+	}
+	if count > utils.DdosCountLimit {
+		return errors.New("DDoS BAN")
+	}
+	err = service.PutData(ip, strconv.Itoa(count+1))
+	if err != nil {
+		return err
+	}
+	return nil
 }
