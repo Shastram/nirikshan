@@ -57,6 +57,7 @@ func runRestServer(applicationService services.ApplicationService) {
 	}))
 	app.Any("/google/*proxyPath", handlers.Proxy(applicationService))
 	routes.UserRouter(app, applicationService)
+	routes.SiteConfigRouter(app, applicationService)
 	log.Infof("Nirikshan server is successfully ready to serve on port: %s",
 		utils.Port)
 	err := app.Run(utils.Port)

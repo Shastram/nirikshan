@@ -41,11 +41,15 @@ func Proxy(service services.ApplicationService) gin.HandlerFunc {
 			BlockedOSVersion || userInfo.Name == configs.BlockedBrowser {
 			c.JSON(utils.ErrorStatusCodes[utils.ErrNotAllowed],
 				presenter.CreateErrorResponse(utils.ErrNotAllowed))
+			return
 		}
 
-		remote, err := url.Parse("https://google.com")
+		remote, err := url.Parse(configs.ForwardingURL)
 		if err != nil {
-			panic(err)
+			log.Error(err)
+			c.JSON(utils.ErrorStatusCodes[utils.ErrServerError],
+				presenter.CreateErrorResponse(utils.ErrServerError))
+			return
 		}
 		proxy := httputil.NewSingleHostReverseProxy(remote)
 		proxy.Director = func(req *http.Request) {

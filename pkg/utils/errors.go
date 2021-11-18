@@ -17,6 +17,7 @@ var (
 	ErrUserNotFound                  AppError = errors.New("user does not exists")
 	ErrWrongPassword                 AppError = errors.New("password doesn't match")
 	ErrInvalidToken                  AppError = errors.New("invalid_credential")
+	ErrInvalidSite                   AppError = errors.New("site_not_configured")
 )
 
 // ErrorStatusCodes holds the http status codes for every AppError
@@ -30,6 +31,7 @@ var ErrorStatusCodes = map[AppError]int{
 	ErrUserNotFound:                  400,
 	ErrWrongPassword:                 400,
 	ErrNotAllowed:                    401,
+	ErrInvalidSite:                   404,
 }
 
 // ErrorDescriptions holds detailed error description for every AppError
@@ -43,4 +45,5 @@ var ErrorDescriptions = map[AppError]string{
 	ErrInvalidToken:                  "This credential is not a valid credential",
 	ErrNotAllowed: "You are not allowed to access this server, " +
 		"contact server admin",
+	ErrInvalidSite: "Site is not configured, contact admin",
 }
