@@ -38,15 +38,16 @@ func Proxy(service services.ApplicationService) gin.HandlerFunc {
 		log.Info("Client Browser: ", userInfo.Name)
 
 		dump := entities.UserRecords{
-			SiteID:   configs.ID,
-			SiteName: configs.SiteName,
-			Device:   userInfo.Device,
-			Os:       userInfo.OS,
-			Browser:  userInfo.Name,
-			IP:       cip,
-			Time:     time.Now(),
+			SiteID:        configs.ID,
+			SiteName:      configs.SiteName,
+			Device:        userInfo.Device,
+			Os:            userInfo.OS,
+			Browser:       userInfo.Name,
+			IP:            cip,
+			Time:          time.Now(),
+			IsBlackListed: false,
 		}
-		err = service.CreateDump(&dump)
+
 		if err != nil {
 			log.Error(err)
 			c.JSON(utils.ErrorStatusCodes[utils.ErrServerError],
@@ -58,11 +59,13 @@ func Proxy(service services.ApplicationService) gin.HandlerFunc {
 			BlockedOS || userInfo.Device == configs.
 			BlockedDevice || userInfo.Version == configs.
 			BlockedOSVersion || userInfo.Name == configs.BlockedBrowser {
+			dump.IsBlackListed = true
+			err = service.CreateDump(&dump)
 			c.JSON(utils.ErrorStatusCodes[utils.ErrNotAllowed],
 				presenter.CreateErrorResponse(utils.ErrNotAllowed))
 			return
 		}
-
+		err = service.CreateDump(&dump)
 		remote, err := url.Parse(configs.ForwardingURL)
 		if err != nil {
 			log.Error(err)

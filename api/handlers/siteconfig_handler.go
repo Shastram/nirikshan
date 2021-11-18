@@ -80,8 +80,18 @@ func GetSiteDump(service services.ApplicationService) gin.HandlerFunc {
 				presenter.CreateErrorResponse(utils.ErrServerError))
 			return
 		}
+		var counter = 0
+		for _, data := range *dump {
+			if data.IsBlackListed {
+				counter++
+			}
+		}
 		c.JSON(http.StatusOK, presenter.CreateSuccessResponse(
-			dump,
+			entities.UserRecordsResponse{
+				Logs:            dump,
+				TotalLength:     len(*dump),
+				BlacklistLength: counter,
+			},
 			"site dump fetched!"))
 	}
 }
