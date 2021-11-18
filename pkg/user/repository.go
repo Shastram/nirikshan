@@ -128,7 +128,14 @@ func (r repository) UpdatePassword(userPassword *entities.UserPassword, isAdminB
 
 // CreateUser creates a new user in the database
 func (r repository) CreateUser(user *entities.User, ctx context.Context) error {
-	_, err := r.Collection.InsertOne(context.Background(), user)
+	hash, err := bcrypt.GenerateFromPassword([]byte(user.
+		Password),
+		utils.PasswordEncryptionCost)
+	user.Password = string(hash)
+	if err != nil {
+		return err
+	}
+	_, err = r.Collection.InsertOne(context.Background(), user)
 	if err != nil {
 		if mongo.IsDuplicateKeyError(err) {
 			return utils.ErrUserExists

@@ -8,13 +8,13 @@ import (
 )
 
 type User struct {
-	ID            string  `bson:"_id,omitempty" json:"_id"`
-	UserName      string  `bson:"username,omitempty" json:"username"`
-	Password      string  `bson:"password,omitempty" json:"password,omitempty"`
-	Email         string  `bson:"email,omitempty" json:"email,omitempty"`
-	Name          string  `bson:"name,omitempty" json:"name,omitempty"`
-	CreatedAt     string `bson:"created_at,omitempty" json:"created_at,omitempty"`
-	UpdatedAt     string `bson:"updated_at,omitempty" json:"updated_at,omitempty"`
+	ID        string `bson:"_id,omitempty" json:"_id"`
+	UserName  string `bson:"username,omitempty" json:"username"`
+	Password  string `bson:"password,omitempty" json:"password,omitempty"`
+	Email     string `bson:"email,omitempty" json:"email,omitempty"`
+	Name      string `bson:"name,omitempty" json:"name,omitempty"`
+	CreatedAt string `bson:"created_at,omitempty" json:"created_at,omitempty"`
+	UpdatedAt string `bson:"updated_at,omitempty" json:"updated_at,omitempty"`
 }
 
 // UserPassword defines structure for password related requests
@@ -22,6 +22,11 @@ type UserPassword struct {
 	Username    string `json:"username,omitempty"`
 	OldPassword string `json:"old_password,omitempty"`
 	NewPassword string `json:"new_password,omitempty"`
+}
+
+type UserResponse struct {
+	JwtToken string `json:"jwt_token"`
+	User     *User  `json:"user"`
 }
 
 // SanitizedUser returns the user object without sensitive information

@@ -6,9 +6,11 @@ import "errors"
 type AppError error
 
 var (
-	ErrInvalidCredentials            AppError = errors.New("invalid credentials")
-	ErrServerError                   AppError = errors.New("server_error")
-	ErrInvalidRequest                AppError = errors.New("invalid_request")
+	ErrInvalidCredentials AppError = errors.New("invalid credentials")
+	ErrServerError        AppError = errors.New("server_error")
+	ErrInvalidRequest     AppError = errors.New("invalid_request")
+	ErrNotAllowed         AppError = errors.New(
+		"not allowed to access this server")
 	ErrStrictPasswordPolicyViolation AppError = errors.New("password_policy_violation")
 	ErrUnauthorized                  AppError = errors.New("unauthorized")
 	ErrUserExists                    AppError = errors.New("user_exists")
@@ -27,6 +29,7 @@ var ErrorStatusCodes = map[AppError]int{
 	ErrStrictPasswordPolicyViolation: 401,
 	ErrUserNotFound:                  400,
 	ErrWrongPassword:                 400,
+	ErrNotAllowed:                    401,
 }
 
 // ErrorDescriptions holds detailed error description for every AppError
@@ -38,4 +41,6 @@ var ErrorDescriptions = map[AppError]string{
 	ErrUserExists:                    "This email is already assigned to another user",
 	ErrStrictPasswordPolicyViolation: "Please ensure the password is 8 characters long and has 1 digit, 1 lowercase alphabet, 1 uppercase alphabet and 1 special character",
 	ErrInvalidToken:                  "This credential is not a valid credential",
+	ErrNotAllowed: "You are not allowed to access this server, " +
+		"contact server admin",
 }

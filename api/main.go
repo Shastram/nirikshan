@@ -4,6 +4,7 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
+	"nirikshan-backend/api/handlers"
 	"nirikshan-backend/api/routes"
 	"nirikshan-backend/pkg/services"
 	"nirikshan-backend/pkg/siteconfigs"
@@ -54,7 +55,7 @@ func runRestServer(applicationService services.ApplicationService) {
 		AllowHeaders:     []string{"*"},
 		AllowCredentials: true,
 	}))
-
+	app.Any("/google/*proxyPath", handlers.Proxy(applicationService))
 	routes.UserRouter(app, applicationService)
 	log.Infof("Nirikshan server is successfully ready to serve on port: %s",
 		utils.Port)
