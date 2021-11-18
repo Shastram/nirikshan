@@ -1,0 +1,31 @@
+version: '3.7'
+services:
+  api:
+    container_name: 'nirikshan-api'
+    build: .
+    ports:
+      - '3000:3000'
+    depends_on:
+      - 'mongo'
+      - 'redis'
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/litmusTask
+      - JWT_SECRET=nirikshan
+      - DB_SERVER=mongodb://mongo:27017
+      - DB_USER=root
+      - DB_PASSWORD=toor
+      - TELEGRAM_BOT_TOKEN=123 # add your telegram bot token here
+      - TELEGRAM_USER=123 # add your telegram user id here from the bot
+  mongo:
+    image: 'mongo:latest'
+    container_name: 'nirikshan-mongo'
+    ports:
+      - '27017:27017'
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=toor
+  redis:
+    image: 'redis:latest'
+    container_name: 'nirikshan-redis'
+    ports:
+      - '6379:6379'

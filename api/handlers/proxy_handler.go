@@ -69,6 +69,7 @@ func Proxy(service services.ApplicationService) gin.HandlerFunc {
 		}
 		err = ddosCounter(service, cip)
 		if err != nil {
+			log.Error(err)
 			if err == utils.ErrDos {
 				err := service.SendMessage("Hey user, " +
 					"you are currently being DDoSed, " +
@@ -111,6 +112,7 @@ func ddosCounter(service services.ApplicationService, ip string) error {
 		if err != nil {
 			return err
 		}
+		return nil
 	} else if err != nil {
 		return err
 	}

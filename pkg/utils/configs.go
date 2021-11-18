@@ -26,7 +26,7 @@ var (
 	RedisPassword         = ""
 	RedisAddr             = "localhost:6379"
 	DdosCountLimit        = 4
-	DdosExpirationTime    = time.Hour * 1
+	DdosExpirationTime    = time.Second * 20
 
 	PasswordEncryptionCost = bcrypt.DefaultCost
 )
