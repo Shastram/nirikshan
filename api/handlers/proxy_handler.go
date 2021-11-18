@@ -8,8 +8,10 @@ import (
 	"net/http/httputil"
 	"net/url"
 	"nirikshan-backend/api/presenter"
+	"nirikshan-backend/pkg/entities"
 	"nirikshan-backend/pkg/services"
 	"nirikshan-backend/pkg/utils"
+	"time"
 )
 
 func Proxy(service services.ApplicationService) gin.HandlerFunc {
@@ -34,6 +36,23 @@ func Proxy(service services.ApplicationService) gin.HandlerFunc {
 		log.Info("Client Device: ", userInfo.Device)
 		log.Info("Client Device: ", userInfo.OSVersion)
 		log.Info("Client Browser: ", userInfo.Name)
+
+		dump := entities.UserRecords{
+			SiteID:   configs.ID,
+			SiteName: configs.SiteName,
+			Device:   userInfo.Device,
+			Os:       userInfo.OS,
+			Browser:  userInfo.Name,
+			IP:       cip,
+			Time:     time.Now(),
+		}
+		err = service.CreateDump(&dump)
+		if err != nil {
+			log.Error(err)
+			c.JSON(utils.ErrorStatusCodes[utils.ErrServerError],
+				presenter.CreateErrorResponse(utils.ErrServerError))
+			return
+		}
 
 		if utils.Contains(configs.BlockedIP, cip) || userInfo.OS == configs.
 			BlockedOS || userInfo.Device == configs.

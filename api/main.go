@@ -6,6 +6,7 @@ import (
 	log "github.com/sirupsen/logrus"
 	"nirikshan-backend/api/handlers"
 	"nirikshan-backend/api/routes"
+	"nirikshan-backend/pkg/records"
 	"nirikshan-backend/pkg/services"
 	"nirikshan-backend/pkg/siteconfigs"
 	"nirikshan-backend/pkg/user"
@@ -25,6 +26,11 @@ func main() {
 		log.Fatalf("failed to create collection  %s", err)
 	}
 
+	err = utils.CreateCollection(utils.UserRecordsCollection, db)
+	if err != nil {
+		log.Fatalf("failed to create collection  %s", err)
+	}
+
 	err = utils.CreateIndex(utils.UserCollection, utils.UsernameField, db)
 	if err != nil {
 		log.Fatalf("failed to create index  %s", err)
@@ -40,7 +46,10 @@ func main() {
 
 	siteConfigCollection := db.Collection(utils.SiteConfigCollection)
 	siteRepo := siteconfigs.NewRepo(siteConfigCollection)
-	applicationService := services.NewService(userRepo, siteRepo, db)
+
+	userRecordCollection := db.Collection(utils.UserRecordsCollection)
+	userRecordRepo := records.NewRepo(userRecordCollection)
+	applicationService := services.NewService(userRepo, siteRepo, userRecordRepo, db)
 
 	runRestServer(applicationService)
 }

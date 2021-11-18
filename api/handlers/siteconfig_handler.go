@@ -59,3 +59,29 @@ func GetSiteConfig(service services.ApplicationService) gin.HandlerFunc {
 			"site config fetched!"))
 	}
 }
+
+func GetSiteDump(service services.ApplicationService) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		site := c.Query("site")
+		if site == "" {
+			c.JSON(utils.ErrorStatusCodes[utils.ErrInvalidRequest],
+				presenter.CreateErrorResponse(utils.ErrInvalidRequest))
+			return
+		}
+		dump, err := service.GetDump(site)
+		if err != nil {
+			log.Error(err)
+			if err == mongo.ErrNoDocuments {
+				c.JSON(utils.ErrorStatusCodes[utils.ErrInvalidSite],
+					presenter.CreateErrorResponse(utils.ErrInvalidSite))
+				return
+			}
+			c.JSON(utils.ErrorStatusCodes[utils.ErrServerError],
+				presenter.CreateErrorResponse(utils.ErrServerError))
+			return
+		}
+		c.JSON(http.StatusOK, presenter.CreateSuccessResponse(
+			dump,
+			"site dump fetched!"))
+	}
+}

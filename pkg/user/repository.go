@@ -7,6 +7,7 @@ import (
 	"golang.org/x/crypto/bcrypt"
 	"nirikshan-backend/pkg/entities"
 	"nirikshan-backend/pkg/utils"
+	"time"
 )
 
 // Repository holds the mongo database implementation of the Service
@@ -135,6 +136,7 @@ func (r repository) CreateUser(user *entities.User, ctx context.Context) error {
 	if err != nil {
 		return err
 	}
+	user.CreatedAt = time.Now()
 	_, err = r.Collection.InsertOne(context.Background(), user)
 	if err != nil {
 		if mongo.IsDuplicateKeyError(err) {
