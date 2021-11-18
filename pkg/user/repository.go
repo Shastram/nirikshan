@@ -88,18 +88,6 @@ func (r repository) FindUserByUsername(username string) (*entities.User, error) 
 	return &result, nil
 }
 
-func (r repository) FindUserByOauthID(oauthID string) (*entities.User, error) {
-	var user entities.User
-	err := r.Collection.FindOne(context.TODO(), bson.M{
-		"oauth_id": oauthID,
-	}).Decode(&user)
-
-	if err != nil {
-		return nil, err
-	}
-	return &user, nil
-}
-
 // CheckPasswordHash checks password hash and password from user input
 func (r repository) CheckPasswordHash(hash, password string) error {
 	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(password))
