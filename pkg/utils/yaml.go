@@ -1,9 +1,10 @@
 package utils
 
 import (
+	"io/ioutil"
+
 	log "github.com/sirupsen/logrus"
 	"gopkg.in/yaml.v2"
-	"io/ioutil"
 )
 
 type SecurityPolicyDefinition struct {
@@ -12,18 +13,18 @@ type SecurityPolicyDefinition struct {
 		SiteData struct {
 			SiteName         string   `yaml:"siteName"`
 			ForwardingURL    string   `yaml:"forwardingUrl"`
-			BlockedOs        []string   `yaml:"blockedOs"`
-			BlockedBrowser   []string   `yaml:"blockedBrowser"`
-			BlockedDevice    []string   `yaml:"blockedDevice"`
-			BlockedOSVersion []string   `yaml:"blockedOSVersion"`
-			BlockedLocations []string   `yaml:"blockedLocations"`
+			BlockedOs        []string `yaml:"blockedOs"`
+			BlockedBrowser   []string `yaml:"blockedBrowser"`
+			BlockedDevice    []string `yaml:"blockedDevice"`
+			BlockedOSVersion []string `yaml:"blockedOSVersion"`
+			BlockedLocations []string `yaml:"blockedLocations"`
 			BlockedIPs       []string `yaml:"blockedIPs"`
 		} `yaml:"siteData"`
 	} `yaml:"siteConfigs"`
 }
 
 func (s *SecurityPolicyDefinition) GetConf() (*SecurityPolicyDefinition, error) {
-	yamlFile, err := ioutil.ReadFile("conf.yaml")
+	yamlFile, err := ioutil.ReadFile("config.yaml")
 	if err != nil {
 		log.Error("yamlFile.Get err   #%v ", err)
 		return nil, err
