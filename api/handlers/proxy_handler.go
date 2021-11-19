@@ -16,9 +16,10 @@ import (
 	"time"
 )
 
-func Proxy(service services.ApplicationService) gin.HandlerFunc {
+func Proxy(service services.ApplicationService,
+	siteName string) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		configs, err := service.GetSiteData("google")
+		configs, err := service.GetSiteData(siteName)
 
 		if err != nil {
 			log.Error(err)
@@ -36,7 +37,7 @@ func Proxy(service services.ApplicationService) gin.HandlerFunc {
 		log.Info("Client IP: ", cip)
 		log.Info("Client OS: ", userInfo.OS)
 		log.Info("Client Device: ", userInfo.Device)
-		log.Info("Client Device: ", userInfo.OSVersion)
+		log.Info("Client Version: ", userInfo.OSVersion)
 		log.Info("Client Browser: ", userInfo.Name)
 
 		dump := entities.UserRecords{
@@ -59,8 +60,12 @@ func Proxy(service services.ApplicationService) gin.HandlerFunc {
 
 		if utils.Contains(configs.BlockedIP, cip) || userInfo.OS == configs.
 			BlockedOS || userInfo.Device == configs.
-			BlockedDevice || userInfo.Version == configs.
+			BlockedDevice || userInfo.OSVersion == configs.
 			BlockedOSVersion || userInfo.Name == configs.BlockedBrowser {
+			log.Info(utils.Contains(configs.BlockedIP, cip), userInfo.OS == configs.
+				BlockedOS, userInfo.Device == configs.
+				BlockedDevice, userInfo.OSVersion == configs.
+				BlockedOSVersion, userInfo.Name == configs.BlockedBrowser)
 			dump.IsBlackListed = true
 			err = service.CreateDump(&dump)
 			log.Warn("blacklisted entry")

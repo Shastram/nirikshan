@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	log "github.com/sirupsen/logrus"
@@ -61,11 +62,12 @@ func main() {
 	teleBot := utils.InitialiseTelegramBot()
 	applicationService := services.NewService(userRepo, siteRepo,
 		userRecordRepo, db, rdb, teleBot)
-	setupDatabase(applicationService)
-	runRestServer(applicationService)
+	securityDefinitions := setupDatabase(applicationService)
+	runRestServer(applicationService, securityDefinitions)
 }
 
-func setupDatabase(service services.ApplicationService) {
+func setupDatabase(service services.ApplicationService) *utils.
+	SecurityPolicyDefinition {
 	var c utils.SecurityPolicyDefinition
 	conf, err := c.GetConf()
 	if err != nil {
@@ -94,9 +96,11 @@ func setupDatabase(service services.ApplicationService) {
 			log.Errorf("Unable to create security policy entry due to %s", err)
 		}
 	}
+	return &c
 }
 
-func runRestServer(applicationService services.ApplicationService) {
+func runRestServer(applicationService services.ApplicationService,
+	definition *utils.SecurityPolicyDefinition) {
 	// Starting REST server using Gin
 	gin.SetMode(gin.ReleaseMode)
 	gin.EnableJsonDecoderDisallowUnknownFields()
@@ -106,7 +110,13 @@ func runRestServer(applicationService services.ApplicationService) {
 		AllowHeaders:     []string{"*"},
 		AllowCredentials: true,
 	}))
-	app.Any("/google/*proxyPath", handlers.Proxy(applicationService))
+	if definition.NirikshanVersion != "" {
+		for _, siteData := range definition.SiteConfigs {
+			app.Any(fmt.Sprintf("/%s/*proxyPath", siteData.SiteData.SiteName),
+				handlers.Proxy(applicationService,
+					siteData.SiteData.SiteName))
+		}
+	}
 	routes.UserRouter(app, applicationService)
 	routes.SiteConfigRouter(app, applicationService)
 	log.Infof("Nirikshan server is successfully ready to serve on port: %s",
