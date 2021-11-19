@@ -58,14 +58,19 @@ func Proxy(service services.ApplicationService,
 			return
 		}
 
-		if utils.Contains(configs.BlockedIP, cip) || userInfo.OS == configs.
-			BlockedOS || userInfo.Device == configs.
-			BlockedDevice || userInfo.OSVersion == configs.
-			BlockedOSVersion || userInfo.Name == configs.BlockedBrowser {
-			log.Info(utils.Contains(configs.BlockedIP, cip), userInfo.OS == configs.
-				BlockedOS, userInfo.Device == configs.
-				BlockedDevice, userInfo.OSVersion == configs.
-				BlockedOSVersion, userInfo.Name == configs.BlockedBrowser)
+		if utils.Contains(configs.BlockedIP, cip) || utils.Contains(configs.
+			BlockedBrowser, userInfo.Name) || utils.Contains(configs.
+			BlockedOS, userInfo.OS) || utils.Contains(configs.
+			BlockedOSVersion, userInfo.OSVersion) || utils.Contains(
+			configs.BlockedLocations, c.Param("proxyPath")) || utils.
+			Contains(configs.BlockedDevice, userInfo.Device) {
+			log.Info(utils.Contains(configs.BlockedIP, cip),
+				utils.Contains(configs.
+					BlockedBrowser, userInfo.Name), utils.Contains(configs.
+					BlockedOS, userInfo.OS), utils.Contains(configs.
+					BlockedOSVersion, userInfo.OSVersion), utils.Contains(
+					configs.BlockedLocations, c.Param("proxyPath")), utils.
+					Contains(configs.BlockedDevice, userInfo.Device))
 			dump.IsBlackListed = true
 			err = service.CreateDump(&dump)
 			log.Warn("blacklisted entry")

@@ -25,7 +25,7 @@ var (
 	TelegramUser           = getEnvAsInt("TELEGRAM_USER", 0)
 	NirikshanBackendGithub = "https://github.com/Shastram/nirikshan-backend"
 	RedisPassword          = ""
-	RedisAddr              = "localhost:6379"
+	RedisAddr              = os.Getenv("REDIS_SERVER")
 	DdosCountLimit         = 4
 	DdosExpirationTime     = time.Second * 20
 

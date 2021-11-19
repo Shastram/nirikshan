@@ -12,11 +12,11 @@ type SecurityPolicyDefinition struct {
 		SiteData struct {
 			SiteName         string   `yaml:"siteName"`
 			ForwardingURL    string   `yaml:"forwardingUrl"`
-			BlockedOs        string   `yaml:"blockedOs"`
-			BlockedBrowser   string   `yaml:"blockedBrowser"`
-			BlockedDevice    string   `yaml:"blockedDevice"`
-			BlockedOSVersion string   `yaml:"blockedOSVersion"`
-			BlockedLocations string   `yaml:"blockedLocations"`
+			BlockedOs        []string   `yaml:"blockedOs"`
+			BlockedBrowser   []string   `yaml:"blockedBrowser"`
+			BlockedDevice    []string   `yaml:"blockedDevice"`
+			BlockedOSVersion []string   `yaml:"blockedOSVersion"`
+			BlockedLocations []string   `yaml:"blockedLocations"`
 			BlockedIPs       []string `yaml:"blockedIPs"`
 		} `yaml:"siteData"`
 	} `yaml:"siteConfigs"`

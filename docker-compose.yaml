@@ -9,11 +9,11 @@ services:
       - 'mongo'
       - 'redis'
     environment:
-      - MONGO_URI=mongodb://mongo:27017/litmusTask
       - JWT_SECRET=nirikshan
       - DB_SERVER=mongodb://mongo:27017
       - DB_USER=root
       - DB_PASSWORD=toor
+      - REDIS_SERVER=redis:6379
       - TELEGRAM_BOT_TOKEN=123 # add your telegram bot token here
       - TELEGRAM_USER=123 # add your telegram user id here from the bot
   mongo:
