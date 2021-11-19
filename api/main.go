@@ -6,11 +6,13 @@ import (
 	log "github.com/sirupsen/logrus"
 	"nirikshan-backend/api/handlers"
 	"nirikshan-backend/api/routes"
+	"nirikshan-backend/pkg/entities"
 	"nirikshan-backend/pkg/records"
 	"nirikshan-backend/pkg/services"
 	"nirikshan-backend/pkg/siteconfigs"
 	"nirikshan-backend/pkg/user"
 	"nirikshan-backend/pkg/utils"
+	"time"
 )
 
 func main() {
@@ -41,6 +43,11 @@ func main() {
 		log.Fatalf("failed to create collection  %s", err)
 	}
 
+	err = utils.CreateIndex(utils.SiteConfigCollection, utils.SiteNameField, db)
+	if err != nil {
+		log.Fatalf("failed to create index  %s", err)
+	}
+
 	userCollection := db.Collection(utils.UserCollection)
 	userRepo := user.NewRepo(userCollection)
 
@@ -54,8 +61,39 @@ func main() {
 	teleBot := utils.InitialiseTelegramBot()
 	applicationService := services.NewService(userRepo, siteRepo,
 		userRecordRepo, db, rdb, teleBot)
-
+	setupDatabase(applicationService)
 	runRestServer(applicationService)
+}
+
+func setupDatabase(service services.ApplicationService) {
+	var c utils.SecurityPolicyDefinition
+	conf, err := c.GetConf()
+	if err != nil {
+		log.Warnf("No security policies loaded due to %s", err)
+	}
+	log.Warn("Security Policies found!")
+	for _, siteData := range conf.SiteConfigs {
+		configs := entities.SiteConfigs{
+			SiteName:         siteData.SiteData.SiteName,
+			ForwardingURL:    siteData.SiteData.ForwardingURL,
+			BlockedOS:        siteData.SiteData.BlockedOs,
+			BlockedBrowser:   siteData.SiteData.BlockedBrowser,
+			BlockedDevice:    siteData.SiteData.BlockedDevice,
+			BlockedOSVersion: siteData.SiteData.BlockedOSVersion,
+			BlockedLocations: siteData.SiteData.BlockedLocations,
+			BlockedIP:        siteData.SiteData.BlockedIPs,
+			CreatedAt:        time.Now(),
+			UpdatedAt:        "",
+		}
+		err := service.CreateSiteData(&configs)
+		if err != nil {
+			if err == utils.ErrUserExists {
+				log.Warnf("Policy for %s already exists", configs.SiteName)
+				continue
+			}
+			log.Errorf("Unable to create security policy entry due to %s", err)
+		}
+	}
 }
 
 func runRestServer(applicationService services.ApplicationService) {
