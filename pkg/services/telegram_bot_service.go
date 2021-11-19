@@ -1,9 +1,10 @@
 package services
 
 import (
+	"nirikshan-backend/pkg/utils"
+
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	log "github.com/sirupsen/logrus"
-	"nirikshan-backend/pkg/utils"
 )
 
 type telegramBotService interface {

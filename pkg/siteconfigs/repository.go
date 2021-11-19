@@ -2,10 +2,11 @@ package siteconfigs
 
 import (
 	"context"
-	"go.mongodb.org/mongo-driver/bson"
-	"go.mongodb.org/mongo-driver/mongo"
 	"nirikshan-backend/pkg/entities"
 	"nirikshan-backend/pkg/utils"
+
+	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
 // Repository holds the mongo database implementation of the Service

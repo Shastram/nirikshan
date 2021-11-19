@@ -1,10 +1,11 @@
 package routes
 
 import (
-	"github.com/gin-gonic/gin"
 	"nirikshan-backend/api/handlers"
 	"nirikshan-backend/api/middleware"
 	"nirikshan-backend/pkg/services"
+
+	"github.com/gin-gonic/gin"
 )
 
 // SiteConfigRouter creates all the required routes for site config purposes.

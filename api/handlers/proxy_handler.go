@@ -1,10 +1,6 @@
 package handlers
 
 import (
-	"github.com/gin-gonic/gin"
-	"github.com/go-redis/redis/v8"
-	ua "github.com/mileusna/useragent"
-	log "github.com/sirupsen/logrus"
 	"net/http"
 	"net/http/httputil"
 	"net/url"
@@ -14,6 +10,11 @@ import (
 	"nirikshan-backend/pkg/utils"
 	"strconv"
 	"time"
+
+	"github.com/gin-gonic/gin"
+	"github.com/go-redis/redis/v8"
+	ua "github.com/mileusna/useragent"
+	log "github.com/sirupsen/logrus"
 )
 
 func Proxy(service services.ApplicationService,

@@ -1,10 +1,11 @@
 package entities
 
 import (
-	"github.com/golang-jwt/jwt"
-	"github.com/sirupsen/logrus"
 	"nirikshan-backend/pkg/utils"
 	"time"
+
+	"github.com/golang-jwt/jwt"
+	"github.com/sirupsen/logrus"
 )
 
 type User struct {

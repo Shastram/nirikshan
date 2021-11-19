@@ -1,12 +1,13 @@
 package handlers
 
 import (
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"nirikshan-backend/api/presenter"
 	"nirikshan-backend/pkg/entities"
 	"nirikshan-backend/pkg/services"
 	"nirikshan-backend/pkg/utils"
+
+	"github.com/gin-gonic/gin"
 )
 
 func Status(service services.ApplicationService) gin.HandlerFunc {

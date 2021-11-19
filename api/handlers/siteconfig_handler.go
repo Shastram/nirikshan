@@ -1,14 +1,15 @@
 package handlers
 
 import (
-	"github.com/gin-gonic/gin"
-	log "github.com/sirupsen/logrus"
-	"go.mongodb.org/mongo-driver/mongo"
 	"net/http"
 	"nirikshan-backend/api/presenter"
 	"nirikshan-backend/pkg/entities"
 	"nirikshan-backend/pkg/services"
 	"nirikshan-backend/pkg/utils"
+
+	"github.com/gin-gonic/gin"
+	log "github.com/sirupsen/logrus"
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
 func CreateSiteConfig(service services.ApplicationService) gin.HandlerFunc {

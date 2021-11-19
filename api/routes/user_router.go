@@ -1,9 +1,10 @@
 package routes
 
 import (
-	"github.com/gin-gonic/gin"
 	"nirikshan-backend/api/handlers"
 	"nirikshan-backend/pkg/services"
+
+	"github.com/gin-gonic/gin"
 )
 
 // UserRouter creates all the required routes for user authentications purposes.

@@ -2,11 +2,12 @@ package middleware
 
 import (
 	"fmt"
+	"nirikshan-backend/api/presenter"
+	"nirikshan-backend/pkg/utils"
+
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
 	"github.com/sirupsen/logrus"
-	"nirikshan-backend/api/presenter"
-	"nirikshan-backend/pkg/utils"
 )
 
 //JwtMiddleware is a Gin Middleware that authorises requests

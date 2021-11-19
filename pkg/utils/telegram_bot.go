@@ -2,9 +2,10 @@ package utils
 
 import (
 	"fmt"
+	"strconv"
+
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	log "github.com/sirupsen/logrus"
-	"strconv"
 )
 
 func InitialiseTelegramBot() *tgbotapi.BotAPI {

@@ -2,9 +2,6 @@ package main
 
 import (
 	"fmt"
-	"github.com/gin-contrib/cors"
-	"github.com/gin-gonic/gin"
-	log "github.com/sirupsen/logrus"
 	"nirikshan-backend/api/handlers"
 	"nirikshan-backend/api/routes"
 	"nirikshan-backend/pkg/entities"
@@ -14,6 +11,10 @@ import (
 	"nirikshan-backend/pkg/user"
 	"nirikshan-backend/pkg/utils"
 	"time"
+
+	"github.com/gin-contrib/cors"
+	"github.com/gin-gonic/gin"
+	log "github.com/sirupsen/logrus"
 )
 
 func main() {

@@ -2,8 +2,9 @@ package services
 
 import (
 	"context"
-	"github.com/go-redis/redis/v8"
 	"nirikshan-backend/pkg/utils"
+
+	"github.com/go-redis/redis/v8"
 )
 
 type redisService interface {
